@@ -1,8 +1,16 @@
 const fs = require('fs');
 
-async function downloadImages(apiImages: any[], outputFolder: string) {
+type HousesType = {
+  id: number;
+  address: string;
+  homeowner: string;
+  price: number;
+  photoURL: string;
+}
 
-  const downloadTasks = apiImages.map(async (imageObj, index) => {
+async function downloadImages(apiImages: HousesType[], outputFolder: string) {
+
+  const downloadTasks = apiImages.map(async (imageObj: HousesType) => {
 
     try {
 
@@ -17,13 +25,9 @@ async function downloadImages(apiImages: any[], outputFolder: string) {
 
       fs.writeFileSync(`${outputFolder}/${filename}`, imageData);
 
-      console.log(`Saved ${filename} to ${outputFolder}`);
     } catch (error) {
 
-
-      // if this fails I would want to retry this as well I think
-
-      // what kind of error would I need to see to want to retry this. Becuase there might be a situation where I have made an error.
+      // TODO: Retry saving the image in case of failure
 
       console.error(`Error downloading image: ${imageObj.photoURL}`);
     }
